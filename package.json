@@ -1,0 +1,20 @@
+{
+  "name": "cypress-pofc",
+  "version": "1.0.0",
+  "description": "Cypress - Proof of concept",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cypress": "cypress open"
+  },
+  "keywords": [
+    "automation",
+    "cypress"
+  ],
+  "author": "Taia Dimitrova",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^7.4.0",
+    "request": "^2.88.2"
+  }
+}
