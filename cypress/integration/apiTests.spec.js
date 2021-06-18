@@ -1,42 +1,54 @@
-import PETS_DATA from "../fixtures/petsTestData.data.json";
+import PETS_DATA from "../fixtures/petsTestData.data";
 
 describe("Api tests", () => {
-  let availablePetsNr;
-  let soldPetsNr;
+  let newPetId;
 
-  it("get inventory", () => {
-    cy.request("GET", "https://petstore.swagger.io/v2/store/inventory").should((response) => {
-      availablePetsNr = response.body["available"];
-      soldPetsNr = response.body["sold"];
-      expect(response.body).to.have.property("available");
+  it("Add a pet", () => {
+    cy.request({
+      method: "POST",
+      url: "https://petstore.swagger.io/v2/pet",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(PETS_DATA),
+    }).should((response) => {
+      cy.log(JSON.stringify(response.body));
+      newPetId = response.body.id;
+      expect(response.status).to.equal(200);
     });
   });
 
-  it("add pet", () => {
-    cy.log("PETS_DATA", JSON.stringify(PETS_DATA));
-
-    cy.request("POST", "https://petstore.swagger.io/v2/pet", JSON.stringify(PETS_DATA));
-
-    cy.request("GET", "https://petstore.swagger.io/v2/store/inventory").should((response) => {
-      expect(availablePetsNr).to.equal(response.body["available"] + 1);
+  it("Get info of the added pet", () => {
+    cy.request("GET", `https://petstore.swagger.io/v2/pet/${newPetId}`).should((response) => {
+      cy.log(JSON.stringify(response.body));
+      expect(response.body).to.have.property("name", "Kira");
     });
   });
 
-  //   it("get pet info", () => {
-  //     cy.request("GET", `https://petstore.swagger.io/v2/pet/${17673740}`).should(
-  //       (response) => {
-  //         cy.log(JSON.stringify(response.body));
-  //         expect(response.body).to.have.property("name", "Kira");
-  //       }
-  //     );
-  //   });
+  it("Update a pet status to sold", () => {
+    cy.request({
+      method: "POST",
+      url: `https://petstore.swagger.io/v2/pet/${newPetId}`,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        Accept: "application/json",
+      },
+      body: "status=sold",
+    }).should((response) => {
+      expect(response.body.message).to.equal(`${newPetId}`);
+    });
+  });
 
-  //   it("check the addresses list", () => {
-  //     cy.request("http://a.testaddressbook.com/addresses").as("addresses");
+  it(`Verify that status for pet with ID ${newPetId} was updated`, () => {
+    cy.request("GET", `https://petstore.swagger.io/v2/pet/${newPetId}`).should((response) => {
+      expect(response.body).to.have.property("status", "sold");
+    });
+  });
 
-  //     cy.get("@addresses").should((response) => {
-  //       cy.log("response:", response);
-  //       expect(response).to.have.property("X-Request-Id");
-  //     });
+  // it("Delete added pet", () => {
+  //   cy.request("DELETE", `https://petstore.swagger.io/v2/pet/${newPetId}`).should((response) => {
+  //     expect(response.status).to.equal(200);
   //   });
+  // });
 });

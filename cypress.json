@@ -1,3 +1,4 @@
 {
-  "screenshotsFolder": "cypress/screenshots"
+  "screenshotsFolder": "cypress/screenshots",
+  "baseUrl": "https://demo.opencart.com/index.php?route="
 }
