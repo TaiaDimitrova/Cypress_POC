@@ -19,7 +19,7 @@ context("UI tests for Open Cart", { retries: 3 }, () => {
   /**
    * The exclusivity feature allows you to run only the specified suite or test-case by appending .only() to the function.
    */
-  it("Register an account", () => {
+  it.only("Register an account", () => {
     cy.visit("account/register");
     OpenCartPage.register(USER_DATA.userDemo);
     cy.url().should("include", "/success");
