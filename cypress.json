@@ -1,4 +1,8 @@
 {
   "screenshotsFolder": "cypress/screenshots",
-  "baseUrl": "https://demo.opencart.com/index.php?route="
+  "baseUrl": "https://demo.opencart.com/index.php?route=",
+  "projectId": "q1fqsv",
+  "env": {
+    "PETS_STORE": "https://petstore.swagger.io/v2/pet/"
+  }
 }

@@ -1,12 +1,13 @@
-import PETS_DATA from "../fixtures/petsTestData.data";
+import PETS_DATA from "../../fixtures/petsTestData.data";
 
 describe("Api tests", () => {
   let newPetId;
+  let url = Cypress.env("PETS_STORE");
 
   it("Add a pet", () => {
     cy.request({
       method: "POST",
-      url: "https://petstore.swagger.io/v2/pet",
+      url: url,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -20,16 +21,16 @@ describe("Api tests", () => {
   });
 
   it("Get info of the added pet", () => {
-    cy.request("GET", `https://petstore.swagger.io/v2/pet/${newPetId}`).should((response) => {
+    cy.request("GET", `${url}${newPetId}`).should((response) => {
       cy.log(JSON.stringify(response.body));
-      expect(response.body).to.have.property("name", "Kira");
+      expect(response.body).to.have.property("name", PETS_DATA.name);
     });
   });
 
   it("Update a pet status to sold", () => {
     cy.request({
       method: "POST",
-      url: `https://petstore.swagger.io/v2/pet/${newPetId}`,
+      url: `${url}${newPetId}`,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
         Accept: "application/json",
@@ -41,14 +42,8 @@ describe("Api tests", () => {
   });
 
   it(`Verify that status for pet with ID ${newPetId} was updated`, () => {
-    cy.request("GET", `https://petstore.swagger.io/v2/pet/${newPetId}`).should((response) => {
+    cy.request("GET", `${url}${newPetId}`).should((response) => {
       expect(response.body).to.have.property("status", "sold");
     });
   });
-
-  // it("Delete added pet", () => {
-  //   cy.request("DELETE", `https://petstore.swagger.io/v2/pet/${newPetId}`).should((response) => {
-  //     expect(response.status).to.equal(200);
-  //   });
-  // });
 });
