@@ -1,4 +1,4 @@
-class OpenLoginPage {
+class OpenCartPage {
   get logoutBtn() {
     return cy.get('.list-group > [href="https://demo.opencart.com/index.php?route=account/logout"]');
   }
@@ -62,6 +62,10 @@ class OpenLoginPage {
     return cy.get("#content > h1").invoke("text");
   }
 
+  get successMessage() {
+    return cy.get("#content > h1");
+  }
+
   goToCheckout() {
     cy.get("#cart-total").click();
     cy.get('[href="https://demo.opencart.com/index.php?route=checkout/checkout"] > strong').click();
@@ -110,4 +114,4 @@ class OpenLoginPage {
   }
 }
 
-export default new OpenLoginPage();
+export default new OpenCartPage();
